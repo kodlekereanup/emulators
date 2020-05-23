@@ -40,16 +40,20 @@ bool write(struct Bus* bus, const uint16_t addr, uint8_t data) {
  * If address is not valid (not in range), function returns 204.
  */
 uint8_t read(const struct Bus* bus, const uint16_t addr, bool readOnly) {
-    return (addr >= 0x0000 && addr <= 0xFFFF)? bus->ram[addr] : 0xCC;
+    return (addr >= 0x0000 && addr <= 0xFFFF)? bus->ram[addr] : 0x00;
 }
 
 void bus_constructor(struct Bus* bus) {
-    // Clear RAM contents //
-    for(int i = 0; i < RAM_SIZE; i++) bus->ram[i] = 0x00;
+    // setting member functions to read and write functions
+    bus->read = read;
+    bus->write = write;
 
     // Connect CPU to communication bus
     // bus->cpu.connectBusAndCPU(bus->cpu, bus);
     bus->cpu.connectCPUAndBus = connectBus;
+
+     // Clear RAM contents //
+    for(int i = 0; i < RAM_SIZE; i++) bus->ram[i] = 0x00;
    
     //connectBus(bus->cpu, bus);
     bus->cpu.connectCPUAndBus(bus->cpu, bus);

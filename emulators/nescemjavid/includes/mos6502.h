@@ -13,7 +13,7 @@ struct mos6502 {
 
     // Connect CPU and Bus
     void    (*connectCPUAndBus)(struct mos6502, struct Bus*);
-    uint8_t (*read)(uint16_t addr); // TODO: map these to bus.h read 
+    uint8_t (*read)(const uint16_t addr); // TODO: map these to bus.h read 
     void    (*write)(uint16_t addr, uint8_t data); // TODO: map this to bus.h write 
 
     /*
@@ -41,6 +41,21 @@ struct mos6502 {
     uint8_t  status;        // Status Register
 
 };
+
+uint8_t read(const uint16_t addr) { 
+    struct Bus* bus;
+    bus->read(bus, addr, false);
+}
+
+void write(uint16_t addr, uint8_t data) { 
+    struct Bus* bus;
+    bus->write(bus, addr, data);
+}
+
+void mos6502_constructor(struct mos6502* cpu) {
+    cpu->read = read;
+    cpu->write = write;
+}
 
 // Function definition for connectBusToCPU() //
 void connectBus(struct mos6502 cpu, struct Bus* b) { cpu.bus = b; }

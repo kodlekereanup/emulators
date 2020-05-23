@@ -10,9 +10,9 @@
 void main(int argc, char** argv) {
     printf("Hello World!");
 
-    struct Bus* bus;
+    struct Bus bus;
     // In OOP, this should call cpu.connectBus(this) //
-    connectBus(bus->cpu, bus);
+    bus_constructor(&bus);
 
 
 }
